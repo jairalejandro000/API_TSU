@@ -37,7 +37,7 @@ class PersonController {
             const {name, last_name, gender, address, number, code} = request.all()
             const P = await Person.findBy('code', code)
             if (P == null){
-                return response.json({message: 'Person was not found'})
+                return response.status(201).json({message: 'Person was not found'})
             }else{
                 P.name = name
                 P.last_name = last_name
@@ -45,7 +45,7 @@ class PersonController {
                 P.address = address
                 P.number = number
                 await P.save()
-                return response.json({message: 'Person was update', P})
+                return response.status(201).json({message: 'Person was update', P})
             }
         }
     }
@@ -59,7 +59,7 @@ class PersonController {
             const {code} = request.all()
             const P = await Person.findBy('code', code)
             await P.delete()
-            return response.json({message: 'Person was deleted', P})
+            return response.status(201).json({message: 'Person was deleted', P})
         }
     }
     async showPerson({ request, response }) {

@@ -7,8 +7,7 @@ class MemberController {
     async createMember({ request, response}) {
         const validation = await validate(request.all(), {
             person_c: 'required',
-            expiration: 'required',
-            golf_car_c: 'required'
+            expiration: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
@@ -24,21 +23,22 @@ class MemberController {
         const validation = await validate(request.all(), {
             person_c: 'required',
             expiration: 'required',
-            golf_car_c: 'unique'
+            golf_car_c: 'required',
+            code: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {person_c, expiration, golf_car_c} = request.all()
+            const {person_c, expiration, golf_car_c, code} = request.all()
             const M = await Member.findBy('code', code)
             if (M == null){
-                return response.json({message: 'Member was not found'})
+                return response.status(201).json({message: 'Member was not found'})
             }else{
                 M.person_c = person_c
                 M.expiration = expiration
                 M.golf_car_c = golf_car_c
                 await M.save()
-                return response.json({message: 'Member was update', M})
+                return response.status(201).json({message: 'Member was update', M})
             }
         }
     }

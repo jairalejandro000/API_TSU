@@ -40,14 +40,14 @@ class UserController extends PersonController{
             const {username, email, password, rol, code} = request.all()
             const U = await User.findBy('code', code)
             if (U == null){
-                return response.json({message: 'User was not found'})
+                return response.status(201).json({message: 'User was not found'})
             }else{
                 U.username = username
                 U.email = email
                 U.password = password
                 U.rol = rol
                 await U.save()
-                return response.json({message: 'User was update', U})
+                return response.status(201).json({message: 'User was update', U})
             }
         }
     }
@@ -61,7 +61,7 @@ class UserController extends PersonController{
             const {code} = request.all()
             const U = await User.findBy('code', code)
             await U.delete()
-            return response.json({message: 'User was deleted', U})
+            return response.status(201).json({message: 'User was deleted', U})
         }
     }
     async showUser({ request, response }) {

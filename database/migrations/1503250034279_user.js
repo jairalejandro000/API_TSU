@@ -4,7 +4,7 @@
 const Schema = use('Schema')
 
 class UserSchema extends Schema {
-  /*up () {
+  up () {
     this.create('users', (table) => {
       table.increments()
       table.string('code', 10).notNullable().unique()
@@ -12,10 +12,10 @@ class UserSchema extends Schema {
       table.string('email', 100).notNullable().unique()
       table.string('password', 254).notNullable()
       table.string('rol', 15).notNullable()
-      table.string('employee_c', 10).notNullable().unique().references('code').inTable('employees')
+      table.string('employee_c').notNullable()//.references('code').inTable('employees')
       table.timestamps()
     })
-  }*/
+  }
 
   down () {
     this.drop('users')

@@ -22,7 +22,8 @@ class EmployeeController {
     async updateEmployee({ request, response }) {   
         const validation = await validate(request.all(), {
             person_c: 'required',
-            area_c: 'required'
+            area_c: 'required',
+            code: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
@@ -30,12 +31,12 @@ class EmployeeController {
             const {person_c, area_c} = request.all()
             const E = await Employee.findBy('code', code)
             if (E == null){
-                return response.json({message: 'Employee was not found'})
+                return response.status(201).json({message: 'Employee was not found'})
             }else{
                 E.person_c = person_c
                 E.area_c = area_c
                 await E.save()
-                return response.json({message: 'Employee was update', E})
+                return response.status(201).json({message: 'Employee was update', E})
             }
         }
     }
@@ -49,7 +50,7 @@ class EmployeeController {
             const {code} = request.all()
             const E = await Employee.findBy('code', code)
             await E.delete()
-            return response.json({message: 'Employee was deleted', E})
+            return response.status(201).json({message: 'Employee was deleted', E})
         }
     }
     async showEmployee({ request, response }) {
