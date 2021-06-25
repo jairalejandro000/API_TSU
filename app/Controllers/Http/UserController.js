@@ -23,62 +23,45 @@ class UserController extends PersonController{
                 length: 10})
             const {username, email, password, rol, employee_c} = request.all()
             const U = await User.create({username, email, password, rol, employee_c, code})
-            return response.status(201).json({ message: 'User created succesful', code})
+            return response.ok({ message: 'User created succesful', code})
         }
     }
-    async updateUser({ request, response }) {   
+    async updateUser({ request, response, params }) {   
         const validation = await validate(request.all(), {
             username: 'required',
             email: 'required|email',
             password: 'required',
-            rol: 'required', 
-            code: 'required'
+            rol: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {username, email, password, rol, code} = request.all()
-            const U = await User.findBy('code', code)
+            const {username, email, password, rol} = request.all()
+            const U = await User.findBy('code', params.code)
             if (U == null){
-                return response.status(201).json({message: 'User was not found'})
+                return response.status(400).json({message: 'User was not found'})
             }else{
                 U.username = username
                 U.email = email
                 U.password = password
                 U.rol = rol
                 await U.save()
-                return response.status(201).json({message: 'User was update', U})
+                return response.ok({message: 'User was update', U})
             }
         }
     }
-    async destroyUser({ request, response }){
-        const validation = await validate(request.all(), {
-            code: 'required'
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const U = await User.findBy('code', code)
-            await U.delete()
-            return response.status(201).json({message: 'User was deleted', U})
-        }
+    async destroyUser({ response, params }){
+        const U = await User.findBy('code', params.code)
+        await U.delete()
+        return response.ok({message: 'User was deleted', U})
     }
-    async showUser({ request, response }) {
-        const validation = await validate(request.all(), {
-            code: 'required',
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const U = await User.findBy('code', code)
-            return response.status(201).json({ message: 'User was found', U })
-        }
+    async showUser({ response, params }) {
+        const U = await User.findBy('code', params.code)
+        return response.ok({ message: 'User was found', U })
     }
     async showUsers({response}){
         const U = await User.all()
-        return response.status(201).json({U})
+        return response.ok({U})
     }
 }
 

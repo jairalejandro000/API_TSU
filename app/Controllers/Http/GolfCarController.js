@@ -20,25 +20,24 @@ class GolfCarController {
                 length: 10})
             const {status, color, model, details, year} = request.all()
             const GC = await GolfCar.create({status, color, model, details, year, code})
-            return response.status(201).json({ message: 'Golf_Car created succesful', code})
+            return response.ok({ message: 'Golf_Car created succesful', code})
         }
     }
-    async updateGolfCar({ request, response }) {   
+    async updateGolfCar({ request, response, params }) {   
         const validation = await validate(request.all(), {
             status: 'required',
             color: 'required',
             model: 'required',
             details: 'required',
-            year: 'required',
-            code: 'required'
+            year: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {status, color, model, details, year, code} = request.all()
-            const GC = await GolfCar.findBy('code', code)
+            const {status, color, model, details, year} = request.all()
+            const GC = await GolfCar.findBy('code', params.code)
             if (L == null){
-                return response.status(201).json({message: 'Golf_Car was not found'})
+                return response.status(400).json({message: 'Golf_Car was not found'})
             }else{
                 GC.status = status
                 GC.color = color
@@ -46,38 +45,22 @@ class GolfCarController {
                 GC.details = details
                 GC.year = year
                 await GC.save()
-                return response.status(201).json({message: 'Golf_Car was update', GC})
+                return response.ok({message: 'Golf_Car was update', GC})
             }
         }
     }
-    async destroyGolfCar({ request, response }){
-        const validation = await validate(request.all(), {
-            code: 'required'
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const GC = await GolfCar.findBy('code', code)
-            await GC.delete()
-            return response.status(201).json({message: 'Golf_Car was deleted', GC})
-        }
+    async destroyGolfCar({ params, response }){
+        const GC = await GolfCar.findBy('code', params.code)
+        await GC.delete()
+        return response.ok({message: 'Golf_Car was deleted', GC})
     }
-    async showGolfCar({ request, response }) {
-        const validation = await validate(request.all(), {
-            code: 'required',
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const GC = await GolfCar.findBy('code', code)
-            return response.status(201).json({ message: 'Golf_Car was found', GC})
-        }
+    async showGolfCar({ params, response }) {
+        const GC = await GolfCar.findBy('code', params.code)
+        return response.ok({ message: 'Golf_Car was found', GC})
     }
     async showGolfCars({response}){
         const GC = await GolfCar.all()
-        return response.status(201).json({GC})
+        return response.ok({GC})
     }
 }
 

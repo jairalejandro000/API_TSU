@@ -19,25 +19,24 @@ class PersonController {
                 length: 10})
             const {name, last_name, gender, address, number} = request.all()
             const P = await Person.create({name, last_name, gender, address, number, code})
-            return response.status(201).json({ message: 'Person created succesful', code })
+            return response.ok({ message: 'Person created succesful', code })
         }
     }
-    async updatePerson({ request, response }) {   
+    async updatePerson({ request, response, params }) {   
         const validation = await validate(request.all(), {
             name: 'required',
             last_name: 'required',
             gender: 'required',
             address: 'required',
-            number: 'required',
-            code: 'required'
+            number: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {name, last_name, gender, address, number, code} = request.all()
-            const P = await Person.findBy('code', code)
+            const {name, last_name, gender, address, number} = request.all()
+            const P = await Person.findBy('code', params.code)
             if (P == null){
-                return response.status(201).json({message: 'Person was not found'})
+                return response.status(400).json({message: 'Person was not found'})
             }else{
                 P.name = name
                 P.last_name = last_name
@@ -45,38 +44,22 @@ class PersonController {
                 P.address = address
                 P.number = number
                 await P.save()
-                return response.status(201).json({message: 'Person was update', P})
+                return response.ok({message: 'Person was update', P})
             }
         }
     }
-    async destroyPerson({ request, response }){
-        const validation = await validate(request.all(), {
-            code: 'required'
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const P = await Person.findBy('code', code)
-            await P.delete()
-            return response.status(201).json({message: 'Person was deleted', P})
-        }
+    async destroyPerson({ params, response }){
+        const P = await Person.findBy('code', params.code)
+        await P.delete()
+        return response.ok({message: 'Person was deleted', P})
     }
-    async showPerson({ request, response }) {
-        const validation = await validate(request.all(), {
-            code: 'required',
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const P = await Person.findBy('code', code)
-            return response.status(201).json({ message: 'Person was found', P })
-        }
+    async showPerson({ params, response }) {
+        const P = await Person.findBy('code', params.code)
+        return response.ok({ message: 'Person was found', P })
     }
     async showPeople({response}){
         const P = await Person.all()
-        return response.status(201).json({P})
+        return response.ok({P})
     }
 }
 

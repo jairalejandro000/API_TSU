@@ -22,10 +22,10 @@ class LoanController {
                 length: 10})
             const {persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit} = request.all()
             const L = await Loan.create({persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit, code})
-            return response.status(201).json({ message: 'Loan created succesful', code})
+            return response.ok({ message: 'Loan created succesful', code})
         }
     }
-    async updateLoan({ request, response }) {   
+    async updateLoan({ request, response, params }) {   
         const validation = await validate(request.all(), {
             persona_rol_c: 'required',
             date: 'required',
@@ -33,16 +33,15 @@ class LoanController {
             end_time: 'required',
             holes: 'required',
             golf_car_c: 'required',
-            visit: 'required',
-            code: 'required'
+            visit: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit, code} = request.all()
-            const L = await Loan.findBy('code', code)
+            const {persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit} = request.all()
+            const L = await Loan.findBy('code', params.code)
             if (L == null){
-                return response.status(201).json({message: 'Loan was not found'})
+                return response.status(400).json({message: 'Loan was not found'})
             }else{
                 L.persona_rol_c = persona_rol_c
                 L.date = date
@@ -52,38 +51,22 @@ class LoanController {
                 L.golf_car_c = golf_car_c
                 L.visit = visit
                 await L.save()
-                return response.status(201).json({message: 'Employee was update', L})
+                return response.ok({message: 'Employee was update', L})
             }
         }
     }
-    async destroyLoan({ request, response }){
-        const validation = await validate(request.all(), {
-            code: 'required'
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const L = await Loan.findBy('code', code)
-            await L.delete()
-            return response.status(201).json({message: 'Loan was deleted', L})
-        }
+    async destroyLoan({ params, response }){
+        const L = await Loan.findBy('code', params.code)
+        await L.delete()
+        return response.ok({message: 'Loan was deleted', L})
     }
-    async showLoan({ request, response }) {
-        const validation = await validate(request.all(), {
-            code: 'required',
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const L = await Loan.findBy('code', code)
-            return response.status(201).json({ message: 'Loan was found', L})
-        }
+    async showLoan({ params, response }) {
+        const L = await Loan.findBy('code', params.code)
+        return response.ok({ message: 'Loan was found', L})
     }
     async showLoans({response}){
         const L = await Loan.all()
-        return response.status(201).json({L})
+        return response.ok({L})
     }
 }
 

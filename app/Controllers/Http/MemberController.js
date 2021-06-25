@@ -16,60 +16,43 @@ class MemberController {
                 length: 10})
             const {person_c, expiration, golf_car_c} = request.all()
             const M = await Member.create({person_c, expiration, golf_car_c, code})
-            return response.status(201).json({ message: 'Member created succesful', code})
+            return response.ok({ message: 'Member created succesful', code})
         }
     }
-    async updateMember({ request, response }) {   
+    async updateMember({ request, response, params }) {   
         const validation = await validate(request.all(), {
             person_c: 'required',
             expiration: 'required',
-            golf_car_c: 'required',
-            code: 'required'
+            golf_car_c: 'required'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {person_c, expiration, golf_car_c, code} = request.all()
-            const M = await Member.findBy('code', code)
+            const {person_c, expiration, golf_car_c} = request.all()
+            const M = await Member.findBy('code', params.code)
             if (M == null){
-                return response.status(201).json({message: 'Member was not found'})
+                return response.status(400).json({message: 'Member was not found'})
             }else{
                 M.person_c = person_c
                 M.expiration = expiration
                 M.golf_car_c = golf_car_c
                 await M.save()
-                return response.status(201).json({message: 'Member was update', M})
+                return response.ok({message: 'Member was update', M})
             }
         }
     }
-    async destroyMember({ request, response }){
-        const validation = await validate(request.all(), {
-            code: 'required'
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const M = await Member.findBy('code', code)
-            await M.delete()
-            return response.json({message: 'Member was deleted', M})
-        }
+    async destroyMember({ params, response }){
+        const M = await Member.findBy('code', params.code)
+        await M.delete()
+        return response.ok({message: 'Member was deleted', M})
     }
-    async showMember({ request, response }) {
-        const validation = await validate(request.all(), {
-            code: 'required',
-        })
-        if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
-        }else {
-            const {code} = request.all()
-            const M = await Member.findBy('code', code)
-            return response.status(201).json({ message: 'Member was found', M})
-        }
+    async showMember({ params, response }) {
+        const M = await Member.findBy('code', params.code)
+        return response.ok({ message: 'Member was found', M})
     }
     async showMembers({response}){
         const M = await Member.all()
-        return response.status(201).json({M})
+        return response.ok({M})
     }
 }
 
