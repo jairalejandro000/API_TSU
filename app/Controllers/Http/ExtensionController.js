@@ -2,28 +2,33 @@
 const { validate } = use('Validator')
 const Extension = use('App/Models/Extension')
 const randomstring = use("randomstring")
+const Employee = use('App/Models/Employee')
 
 class ExtensionController {
     async createExtension({ request, response}) {
         const validation = await validate(request.all(), {
-            employee_c: 'required',
-            extension: 'required'
-
+            employee_c: 'required|unique:extensions,employee_c',
+            extension: 'required|min:3|max:6'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
+            const {employee_c, extension} = request.all()
             const code = randomstring.generate({
                 length: 10})
-            const {employee_c, extension} = request.all()
-            const E = await Extension.create({employee_c, extension, code})
-            return response.ok({ message: 'Extension created succesful', code})
+            const E = await Employee.findBy('code', employee_c)
+            if(E == null){
+                return response.status(400).json({message: 'Wrong credentials'})
+            }else{
+                const E = await Extension.create({employee_c, extension, code})
+                return response.ok({ message: 'Extension created succesful', code})
+            }
         }
     }
     async updateExtension({ request, response, params }) {   
         const validation = await validate(request.all(), {
-            employee_c: 'required',
-            extension: 'required'
+            employee_c: 'required|unique:extensions,employee_c',
+            extension: 'required|min:3|max:6'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
@@ -33,10 +38,15 @@ class ExtensionController {
             if (E == null){
                 return response.status(400).json({message: 'Extension was not found'})
             }else{
-                E.employee_c = employee_c
-                E.extension = extension
-                await E.save()
-                return response.ok({message: 'Extension was update', E})
+                const EM = await Employee.findBy('code', employee_c)
+                if(EM == null){
+                    return response.status(400).json({message: 'Wrong credentials'})
+                }else{
+                    E.employee_c = employee_c
+                    E.extension = extension
+                    await E.save()
+                    return response.ok({message: 'Extension was update', E})
+                }
             }
         }
     }

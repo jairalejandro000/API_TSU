@@ -6,11 +6,11 @@ const randomstring = use("randomstring");
 class PersonController {
     async createPerson({ request, response }) {
         const validation = await validate(request.all(), {
-            name: 'required',
-            last_name: 'required',
-            gender: 'required',
-            address: 'required',
-            number: 'required'
+            name: 'required|min:3|max:30',
+            last_name: 'required|min:3|max:100',
+            gender: 'required|max:1',
+            address: 'required|min:10|max:254',
+            number: 'required|min:7|max:15'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
@@ -24,11 +24,11 @@ class PersonController {
     }
     async updatePerson({ request, response, params }) {   
         const validation = await validate(request.all(), {
-            name: 'required',
-            last_name: 'required',
-            gender: 'required',
-            address: 'required',
-            number: 'required'
+            name: 'required|min:3|max:30',
+            last_name: 'required|min:3|max:100',
+            gender: 'required|max:1',
+            address: 'required|min:10|max:254',
+            number: 'required|min:7|max:15'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})

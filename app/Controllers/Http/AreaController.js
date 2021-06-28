@@ -6,8 +6,8 @@ const randomstring = use("randomstring")
 class AreaController {
     async createArea({ request, response}) {
         const validation = await validate(request.all(), {
-            name: 'required',
-            description: 'required'
+            name: 'required|min:3|max:20',
+            description: 'required|max:100|min:10'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
@@ -21,8 +21,8 @@ class AreaController {
     }
     async updateArea({ request, response, params }) {   
         const validation = await validate(request.all(), {
-            name: 'required',
-            description: 'required'
+            name: 'required|min:3|max:20',
+            description: 'required|max:100|min:10'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})

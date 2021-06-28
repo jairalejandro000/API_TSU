@@ -6,11 +6,11 @@ const randomstring = use("randomstring")
 class GolfCarController {
     async createGolfCar({ request, response}) {
         const validation = await validate(request.all(), {
-            status: 'required',
-            color: 'required',
-            model: 'required',
-            details: 'required',
-            year: 'required'
+            status: 'required|max:30|min:5',
+            color: 'required|max:20|min:3',
+            model: 'required|max:100|min:5',
+            details: 'required|max:100|min:5',
+            year: 'required|max:4'
 
         })
         if (validation.fails()){
@@ -25,11 +25,11 @@ class GolfCarController {
     }
     async updateGolfCar({ request, response, params }) {   
         const validation = await validate(request.all(), {
-            status: 'required',
-            color: 'required',
-            model: 'required',
-            details: 'required',
-            year: 'required'
+            status: 'required|max:30|min:5',
+            color: 'required|max:20|min:3',
+            model: 'required|max:100|min:5',
+            details: 'required|max:100|min:5',
+            year: 'required|max:4'
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})

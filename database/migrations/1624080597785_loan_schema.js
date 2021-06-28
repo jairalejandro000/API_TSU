@@ -14,7 +14,7 @@ class LoanSchema extends Schema {
       table.time('end_time').notNullable()
       table.integer('holes', 2).notNullable()
       table.string('golf_car_c', 10).notNullable()//.references('code').inTable('golf_cars')
-      table.boolean('visit')
+      table.boolean('visit').notNullable()
       table.timestamps()
     })
   }
