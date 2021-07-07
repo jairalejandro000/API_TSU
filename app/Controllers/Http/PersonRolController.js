@@ -17,16 +17,16 @@ class PersonRolController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, member_c, employee_C} = request.all()
-            const P = await Person.findBy('code', code)
-            const M = await Member.findBy('code', code)
-            const E = await Employee.findBy('code', code)
+            const P = await Person.findBy('codep', person_c)
+            const M = await Member.findBy('codem', member_c)
+            const E = await Employee.findBy('codee', employee_c)
             if(P == null || M == null || E == null){
                 return response.status(400).json({message: 'Wrong credentials'})
             }else{
-                const code = randomstring.generate({
+                const codepr = randomstring.generate({
                     length: 10})
                 const PR = await PersonRol.create({person_c, member_c, employee_C, code})
-                return response.ok({ message: 'PersonRol created succesful', code})
+                return response.ok({ message: 'PersonRol created succesful', codepr})
             }
         }
     }
@@ -40,13 +40,13 @@ class PersonRolController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, member_c, employee_c} = request.all()
-            const PR = await PersonRol.findBy('code', params.code)
+            const PR = await PersonRol.findBy('codepr', params.codepr)
             if (PR == null){
                 return response.status(400).json({message: 'PersonRol was not found'})
             }else{
-                const P = await Person.findBy('code', code)
-                const M = await Member.findBy('code', code)
-                const E = await Employee.findBy('code', code)
+                const P = await Person.findBy('codep', person_c)
+                const M = await Member.findBy('codem', member_c)
+                const E = await Employee.findBy('codee', employee_c)
                 if(P == null || M == null || E == null){
                     return response.status(400).json({message: 'Wrong credentials'})
                 }else{
@@ -60,12 +60,12 @@ class PersonRolController {
         }
     }
     async destroyPersonRol({ params, response }){
-        const PR = await PersonRol.findBy('code', params.code)
+        const PR = await PersonRol.findBy('codepr', params.codepr)
         await PR.delete()
         return response.ok({message: 'PersonRol was deleted', PR})
     }
     async showPersonRol({ params, response }) {
-        const PR = await PersonRol.findBy('code', params.code)
+        const PR = await PersonRol.findBy('codepr', params.codepr)
         return response.ok({ message: 'PersonRol was found', PR})
     }
     async showPersonRols({response}){

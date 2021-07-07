@@ -7,6 +7,7 @@ class ExtensionSchema extends Schema {
   up () {
     this.create('extensions', (table) => {
       table.increments()
+      table.string('codex', 10).notNullable().unique()
       table.string('employee_c', 10).notNullable().unique()//.references('code').inTable('employees')
       table.integer('extension', 10).notNullable().unique()
       table.timestamps()

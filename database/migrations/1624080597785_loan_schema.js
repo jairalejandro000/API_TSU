@@ -7,7 +7,7 @@ class LoanSchema extends Schema {
   up () {
     this.create('loans', (table) => {
       table.increments()
-      table.string('code', 10).notNullable().unique()
+      table.string('codel', 10).notNullable().unique()
       table.string('persona_rol_c', 10).notNullable()//.references('code').inTable('person_rols')
       table.date('date').notNullable()
       table.time('start_time').notNullable()

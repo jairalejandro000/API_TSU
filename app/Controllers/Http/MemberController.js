@@ -16,14 +16,14 @@ class MemberController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, expiration, golf_car_c} = request.all()
-            const code = randomstring.generate({
+            const codem = randomstring.generate({
                 length: 10})
-            const P = await Person.findBy('code', person_c) 
+            const P = await Person.findBy('codep', person_c) 
             if(P == null){
                 return response.status(400).json({message: 'Wrong credentials'})
             }else{
-                const M = await Member.create({person_c, expiration, golf_car_c, code})
-                return response.ok({ message: 'Member created succesful', code})
+                const M = await Member.create({person_c, expiration, golf_car_c, codem})
+                return response.ok({ message: 'Member created succesful', codem})
             }
         }
     }
@@ -37,12 +37,12 @@ class MemberController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, expiration, golf_car_c} = request.all()
-            const M = await Member.findBy('code', params.code)
+            const M = await Member.findBy('codem', params.codem)
             if (M == null){
                 return response.status(400).json({message: 'Member was not found'})
             }else{
-                const P = await person.findBy('code', person_c)
-                const GC = await GolfCar.findBy('code', golc_car_c)
+                const P = await person.findBy('codep', person_c)
+                const GC = await GolfCar.findBy('codegc', golc_car_c)
                 if(P == null || GC == null){
                     return response.status(400).json({message: 'Wrong credentials'})
                 }else{
@@ -56,12 +56,12 @@ class MemberController {
         }
     }
     async destroyMember({ params, response }){
-        const M = await Member.findBy('code', params.code)
+        const M = await Member.findBy('codem', params.codem)
         await M.delete()
         return response.ok({message: 'Member was deleted', M})
     }
     async showMember({ params, response }) {
-        const M = await Member.findBy('code', params.code)
+        const M = await Member.findBy('codem', params.codem)
         return response.ok({ message: 'Member was found', M})
     }
     async showMembers({response}){

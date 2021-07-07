@@ -7,7 +7,7 @@ class GolfCarSchema extends Schema {
   up () {
     this.create('golf_cars', (table) => {
       table.increments()
-      table.string('code', 10).notNullable().unique()
+      table.string('codegc', 10).notNullable().unique()
       table.string('status', 30).notNullable()
       table.string('color', 20).notNullable()
       table.string('model', 100).notNullable()

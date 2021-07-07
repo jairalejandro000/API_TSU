@@ -17,14 +17,14 @@ class UserController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {username, email, password, rol, employee_c} = request.all()
-            const E = await Employee.findBy('code', employee_c)
+            const E = await Employee.findBy('codee', employee_c)
             if(E == null){
                 return response.status(400).json({ message: 'Wrong credentials'})
             }else{
-                const code = randomstring.generate({
+                const codeu = randomstring.generate({
                     length: 10})
-                const U = await User.create({username, email, password, rol, employee_c, code})
-                return response.ok({ message: 'User created succesful', code})
+                const U = await User.create({username, email, password, rol, employee_c, codeu})
+                return response.ok({ message: 'User created succesful', codeu})
             }
         }
     }
@@ -39,7 +39,7 @@ class UserController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {username, email, password, rol} = request.all()
-            const U = await User.findBy('code', params.code)
+            const U = await User.findBy('codee', params.codee)
             if (U == null){
                 return response.status(400).json({message: 'User was not found'})
             }else{
@@ -53,12 +53,12 @@ class UserController {
         }
     }
     async destroyUser({ response, params }){
-        const U = await User.findBy('code', params.code)
+        const U = await User.findBy('codee', params.codee)
         await U.delete()
         return response.ok({message: 'User was deleted', U})
     }
     async showUser({ response, params }) {
-        const U = await User.findBy('code', params.code)
+        const U = await User.findBy('codee', params.codee)
         return response.ok({ message: 'User was found', U })
     }
     async showUsers({response}){

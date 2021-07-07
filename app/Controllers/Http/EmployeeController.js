@@ -15,15 +15,15 @@ class EmployeeController {
             return response.status(400).json({ message: 'Validation error'})
         }else{
             const {person_c, area_c} = request.all()
-            const code = randomstring.generate({
+            const codee = randomstring.generate({
                 length: 10})
-            const P = await Person.findBy('code', person_c)
-            const A = await Area.findBy('code', area_c)
+            const P = await Person.findBy('codep', person_c)
+            const A = await Area.findBy('codea', area_c)
             if(P == null || A == null){
                 return response.status(400).json({ message: 'Wrong credentials'})
             }else{
-                const E = await Employee.create({person_c, area_c, code})
-                return response.ok({ message: 'Employee created succesful', code})
+                const E = await Employee.create({person_c, area_c, codee})
+                return response.ok({ message: 'Employee created succesful', codee})
             }
         }
     }
@@ -36,12 +36,12 @@ class EmployeeController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, area_c} = request.all()
-            const E = await Employee.findBy('code', params.code)
+            const E = await Employee.findBy('codee', params.codee)
             if (E == null){
                 return response.status(400).json({message: 'Employee was not found'})
             }else{
-                const P = await Person.findBy('code', person_c)
-                const A = await Area.findBy('code', area_c)
+                const P = await Person.findBy('codep', person_c)
+                const A = await Area.findBy('codea', area_c)
                 if(P == null || A == null){
                     return response.status(400).json({ message: 'Wrong credentials'})
                 }else{
@@ -54,12 +54,12 @@ class EmployeeController {
         }
     }
     async destroyEmployee({ params, response }){
-        const E = await Employee.findBy('code', params.code)
+        const E = await Employee.findBy('codee', params.codee)
         await E.delete()
         return response.ok({message: 'Employee was deleted', E})
     }
     async showEmployee({ params, response }) {
-        const E = await Employee.findBy('code', params.code)
+        const E = await Employee.findBy('codee', params.codee)
         return response.ok({ message: 'Employee was found', E})
     }
     async showEmployees({response}){

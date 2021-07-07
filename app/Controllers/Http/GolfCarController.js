@@ -16,11 +16,11 @@ class GolfCarController {
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const code = randomstring.generate({
+            const codegc = randomstring.generate({
                 length: 10})
             const {status, color, model, details, year} = request.all()
-            const GC = await GolfCar.create({status, color, model, details, year, code})
-            return response.ok({ message: 'Golf_Car created succesful', code})
+            const GC = await GolfCar.create({status, color, model, details, year, codegc})
+            return response.ok({ message: 'Golf_Car created succesful', codegc})
         }
     }
     async updateGolfCar({ request, response, params }) {   
@@ -35,7 +35,7 @@ class GolfCarController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {status, color, model, details, year} = request.all()
-            const GC = await GolfCar.findBy('code', params.code)
+            const GC = await GolfCar.findBy('codegc', params.codegc)
             if (L == null){
                 return response.status(400).json({message: 'Golf_Car was not found'})
             }else{
@@ -50,12 +50,12 @@ class GolfCarController {
         }
     }
     async destroyGolfCar({ params, response }){
-        const GC = await GolfCar.findBy('code', params.code)
+        const GC = await GolfCar.findBy('codegc', params.codegc)
         await GC.delete()
         return response.ok({message: 'Golf_Car was deleted', GC})
     }
     async showGolfCar({ params, response }) {
-        const GC = await GolfCar.findBy('code', params.code)
+        const GC = await GolfCar.findBy('codegc', params.codegc)
         return response.ok({ message: 'Golf_Car was found', GC})
     }
     async showGolfCars({response}){

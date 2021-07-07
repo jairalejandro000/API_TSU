@@ -7,7 +7,7 @@ class PersonSchema extends Schema {
   up () {
     this.create('people', (table) => {
       table.increments()
-      table.string('code', 10).notNullable().unique()
+      table.string('codep', 10).notNullable().unique()
       table.string('name', 30).notNullable()
       table.string('last_name', 100).notNullable()
       table.boolean('gender').notNullable()

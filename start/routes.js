@@ -91,6 +91,14 @@ Route.group(() => {
   Route.delete('/delete/:code', 'AreaController.destroyArea') //Delete the area
 }).prefix('/Area')
 
+Route.group(() => {
+  Route.post('/createMember', 'AuthController.createMember') //Only return the member's code
+  Route.post('/createEmployee', 'AuthController.createEmployee') //Only return the employee's code
+  Route.post('/createUser', 'AuthController.createUser') //Only return the user's code
+  Route.post('/LogIn', 'AuthController.LogIn') //Return the jwt token
+  Route.post('/LogOut', 'AuthController.LogOut') //Delete the token in the cookies
+}).prefix('/Auth')
+
 
 
 

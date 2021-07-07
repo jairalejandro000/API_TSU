@@ -15,11 +15,11 @@ class PersonController {
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const code = await randomstring.generate({
+            const codep = await randomstring.generate({
                 length: 10})
             const {name, last_name, gender, address, number} = request.all()
-            const P = await Person.create({name, last_name, gender, address, number, code})
-            return response.ok({ message: 'Person created succesful', code })
+            const P = await Person.create({name, last_name, gender, address, number, codep})
+            return response.ok({ message: 'Person created succesful', codep })
         }
     }
     async updatePerson({ request, response, params }) {   
@@ -34,7 +34,7 @@ class PersonController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {name, last_name, gender, address, number} = request.all()
-            const P = await Person.findBy('code', params.code)
+            const P = await Person.findBy('codep', params.codep)
             if (P == null){
                 return response.status(400).json({message: 'Person was not found'})
             }else{
@@ -49,12 +49,12 @@ class PersonController {
         }
     }
     async destroyPerson({ params, response }){
-        const P = await Person.findBy('code', params.code)
+        const P = await Person.findBy('codep', params.codep)
         await P.delete()
         return response.ok({message: 'Person was deleted', P})
     }
     async showPerson({ params, response }) {
-        const P = await Person.findBy('code', params.code)
+        const P = await Person.findBy('codep', params.codep)
         return response.ok({ message: 'Person was found', P })
     }
     async showPeople({response}){

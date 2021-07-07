@@ -21,15 +21,15 @@ class LoanController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit} = request.all()
-            const code = randomstring.generate({
+            const codel = randomstring.generate({
                 length: 10})
-            const PR = await PersonRol.findBy('code', persona_rol_c)
-            const GC = await GolfCar.findBy('code', golf_car_c)
+            const PR = await PersonRol.findBy('codepr', persona_rol_c)
+            const GC = await GolfCar.findBy('codegc', golf_car_c)
             if(PR == null || GC == null){
                 return response.status(400).json({message: 'Wrong credentials'})
             }else{
-                const L = await Loan.create({persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit, code})
-                return response.ok({ message: 'Loan created succesful', code})
+                const L = await Loan.create({persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit, codel})
+                return response.ok({ message: 'Loan created succesful', codel})
             }
         }
     }
@@ -47,12 +47,12 @@ class LoanController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit} = request.all()
-            const L = await Loan.findBy('code', params.code)
+            const L = await Loan.findBy('codel', params.code)
             if (L == null){
                 return response.status(400).json({message: 'Loan was not found'})
             }else{
-                const PR = await PersonRol.findBy('code', persona_rol_c)
-                const GC = await GolfCar.findBy('code', golf_car_c)
+                const PR = await PersonRol.findBy('codepr', persona_rol_c)
+                const GC = await GolfCar.findBy('codegc', golf_car_c)
                 if(PR == null || GC == null){
                     return response.status(400).json({message: 'Wrong credentials'})
                 }else{
@@ -70,12 +70,12 @@ class LoanController {
         }
     }
     async destroyLoan({ params, response }){
-        const L = await Loan.findBy('code', params.code)
+        const L = await Loan.findBy('codel', params.codel)
         await L.delete()
         return response.ok({message: 'Loan was deleted', L})
     }
     async showLoan({ params, response }) {
-        const L = await Loan.findBy('code', params.code)
+        const L = await Loan.findBy('codel', params.codel)
         return response.ok({ message: 'Loan was found', L})
     }
     async showLoans({response}){

@@ -14,14 +14,14 @@ class ExtensionController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {employee_c, extension} = request.all()
-            const code = randomstring.generate({
+            const codex = randomstring.generate({
                 length: 10})
-            const E = await Employee.findBy('code', employee_c)
+            const E = await Employee.findBy('codee', employee_c)
             if(E == null){
                 return response.status(400).json({message: 'Wrong credentials'})
             }else{
-                const E = await Extension.create({employee_c, extension, code})
-                return response.ok({ message: 'Extension created succesful', code})
+                const E = await Extension.create({employee_c, extension, codex})
+                return response.ok({ message: 'Extension created succesful', codex})
             }
         }
     }
@@ -34,11 +34,11 @@ class ExtensionController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {employee_c, extension} = request.all()
-            const E = await Extension.findBy('code', params.code)
+            const E = await Extension.findBy('codex', params.codex)
             if (E == null){
                 return response.status(400).json({message: 'Extension was not found'})
             }else{
-                const EM = await Employee.findBy('code', employee_c)
+                const EM = await Employee.findBy('codee', employee_c)
                 if(EM == null){
                     return response.status(400).json({message: 'Wrong credentials'})
                 }else{
@@ -51,12 +51,12 @@ class ExtensionController {
         }
     }
     async destroyExtension({ params, response }){
-        const E = await Extension.findBy('code', params.code)
+        const E = await Extension.findBy('codex', params.codex)
         await E.delete()
         return response.ok({message: 'Extension was deleted', E})
     }
     async showExtension({ params, response }) {
-        const E = await Extension.findBy('code', params.code)
+        const E = await Extension.findBy('codex', params.codex)
         return response.ok({ message: 'Extension was found', E})
     }
     async showExtensions({response}){
