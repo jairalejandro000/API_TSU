@@ -12,11 +12,11 @@ class AreaController {
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const code = randomstring.generate({
+            const codea = randomstring.generate({
                 length: 10})
             const {name, description} = request.all()
-            const A = await Area.create({ name, description, code})
-            return response.ok({ message: 'Area created succesful', code})
+            const A = await Area.create({ name, description, codea})
+            return response.ok({ message: 'Area created succesful', codea})
         }
     }
     async updateArea({ request, response, params }) {   
@@ -28,7 +28,7 @@ class AreaController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {name, description} = request.all()
-            const A = await Area.findBy('code', params.code)
+            const A = await Area.findBy('codea', params.code)
             if (A == null){
                 return response.status(400).json({message: 'Area was not found'})
             }else{
@@ -40,12 +40,12 @@ class AreaController {
         }
     }
     async destroyArea({ params, response }){
-        const A = await Area.findBy('code', params.code)
+        const A = await Area.findBy('codea', params.code)
         await A.delete()
         return response.ok({message: 'Area was deleted', A})
     }
     async showArea({ params, response }) {
-        const A = await Area.findBy('code', params.code)
+        const A = await Area.findBy('codea', params.code)
         return response.ok({ message: 'Area was found', A})
     }
     async showAreas({response}){

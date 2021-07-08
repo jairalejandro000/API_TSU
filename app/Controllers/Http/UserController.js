@@ -39,7 +39,7 @@ class UserController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {username, email, password, rol} = request.all()
-            const U = await User.findBy('codee', params.codee)
+            const U = await User.findBy('codeu', params.code)
             if (U == null){
                 return response.status(400).json({message: 'User was not found'})
             }else{
@@ -53,12 +53,12 @@ class UserController {
         }
     }
     async destroyUser({ response, params }){
-        const U = await User.findBy('codee', params.codee)
+        const U = await User.findBy('codeu', params.code)
         await U.delete()
         return response.ok({message: 'User was deleted', U})
     }
     async showUser({ response, params }) {
-        const U = await User.findBy('codee', params.codee)
+        const U = await User.findBy('codeu', params.code)
         return response.ok({ message: 'User was found', U })
     }
     async showUsers({response}){

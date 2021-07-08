@@ -40,7 +40,7 @@ class PersonRolController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, member_c, employee_c} = request.all()
-            const PR = await PersonRol.findBy('codepr', params.codepr)
+            const PR = await PersonRol.findBy('codepr', params.code)
             if (PR == null){
                 return response.status(400).json({message: 'PersonRol was not found'})
             }else{
@@ -60,12 +60,12 @@ class PersonRolController {
         }
     }
     async destroyPersonRol({ params, response }){
-        const PR = await PersonRol.findBy('codepr', params.codepr)
+        const PR = await PersonRol.findBy('codepr', params.code)
         await PR.delete()
         return response.ok({message: 'PersonRol was deleted', PR})
     }
     async showPersonRol({ params, response }) {
-        const PR = await PersonRol.findBy('codepr', params.codepr)
+        const PR = await PersonRol.findBy('codepr', params.code)
         return response.ok({ message: 'PersonRol was found', PR})
     }
     async showPersonRols({response}){

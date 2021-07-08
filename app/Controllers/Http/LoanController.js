@@ -70,12 +70,12 @@ class LoanController {
         }
     }
     async destroyLoan({ params, response }){
-        const L = await Loan.findBy('codel', params.codel)
+        const L = await Loan.findBy('codel', params.code)
         await L.delete()
         return response.ok({message: 'Loan was deleted', L})
     }
     async showLoan({ params, response }) {
-        const L = await Loan.findBy('codel', params.codel)
+        const L = await Loan.findBy('codel', params.code)
         return response.ok({ message: 'Loan was found', L})
     }
     async showLoans({response}){

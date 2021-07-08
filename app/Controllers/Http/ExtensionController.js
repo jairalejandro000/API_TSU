@@ -34,7 +34,7 @@ class ExtensionController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {employee_c, extension} = request.all()
-            const E = await Extension.findBy('codex', params.codex)
+            const E = await Extension.findBy('codex', params.code)
             if (E == null){
                 return response.status(400).json({message: 'Extension was not found'})
             }else{
@@ -51,12 +51,12 @@ class ExtensionController {
         }
     }
     async destroyExtension({ params, response }){
-        const E = await Extension.findBy('codex', params.codex)
+        const E = await Extension.findBy('codex', params.code)
         await E.delete()
         return response.ok({message: 'Extension was deleted', E})
     }
     async showExtension({ params, response }) {
-        const E = await Extension.findBy('codex', params.codex)
+        const E = await Extension.findBy('codex', params.code)
         return response.ok({ message: 'Extension was found', E})
     }
     async showExtensions({response}){

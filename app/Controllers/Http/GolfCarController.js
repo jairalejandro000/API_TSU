@@ -35,7 +35,7 @@ class GolfCarController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {status, color, model, details, year} = request.all()
-            const GC = await GolfCar.findBy('codegc', params.codegc)
+            const GC = await GolfCar.findBy('codegc', params.code)
             if (L == null){
                 return response.status(400).json({message: 'Golf_Car was not found'})
             }else{
@@ -50,12 +50,12 @@ class GolfCarController {
         }
     }
     async destroyGolfCar({ params, response }){
-        const GC = await GolfCar.findBy('codegc', params.codegc)
+        const GC = await GolfCar.findBy('codegc', params.code)
         await GC.delete()
         return response.ok({message: 'Golf_Car was deleted', GC})
     }
     async showGolfCar({ params, response }) {
-        const GC = await GolfCar.findBy('codegc', params.codegc)
+        const GC = await GolfCar.findBy('codegc', params.code)
         return response.ok({ message: 'Golf_Car was found', GC})
     }
     async showGolfCars({response}){

@@ -34,7 +34,7 @@ class PersonController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {name, last_name, gender, address, number} = request.all()
-            const P = await Person.findBy('codep', params.codep)
+            const P = await Person.findBy('codep', params.code)
             if (P == null){
                 return response.status(400).json({message: 'Person was not found'})
             }else{
@@ -49,12 +49,12 @@ class PersonController {
         }
     }
     async destroyPerson({ params, response }){
-        const P = await Person.findBy('codep', params.codep)
+        const P = await Person.findBy('codep', params.code)
         await P.delete()
         return response.ok({message: 'Person was deleted', P})
     }
     async showPerson({ params, response }) {
-        const P = await Person.findBy('codep', params.codep)
+        const P = await Person.findBy('codep', params.code)
         return response.ok({ message: 'Person was found', P })
     }
     async showPeople({response}){

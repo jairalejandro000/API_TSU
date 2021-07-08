@@ -1,4 +1,6 @@
 'use strict'
+const Hash = use('Hash')
+
 const { validate } = use('Validator')
 const Employee = use('App/Models/Employee')
 const Member = use('App/Models/Member')
@@ -90,9 +92,15 @@ class AuthController {
             if(U == null){
                 return response.status(400).json({ message: 'Wrong credentials'})
             }else{
-                const token = await auth.attempt(email, password, U.rol)
-                const exx = U.rol
-                return response.ok({ message: 'Successful login', token, exx})
+                const isSame = await Hash.verify(password, U.password)
+                if (isSame) {
+                    const token = await auth.attempt(email, password, U.rol)
+                    const exx = U.rol
+                    return response.ok({ message: 'Successful login', token, exx})
+
+                }else{
+                    return response.status(400).json({ message: 'Wrong credentials'})
+                }
             }
         }
     }

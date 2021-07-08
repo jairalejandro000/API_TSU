@@ -36,7 +36,7 @@ class EmployeeController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, area_c} = request.all()
-            const E = await Employee.findBy('codee', params.codee)
+            const E = await Employee.findBy('codee', params.code)
             if (E == null){
                 return response.status(400).json({message: 'Employee was not found'})
             }else{
@@ -54,12 +54,12 @@ class EmployeeController {
         }
     }
     async destroyEmployee({ params, response }){
-        const E = await Employee.findBy('codee', params.codee)
+        const E = await Employee.findBy('codee', params.code)
         await E.delete()
         return response.ok({message: 'Employee was deleted', E})
     }
     async showEmployee({ params, response }) {
-        const E = await Employee.findBy('codee', params.codee)
+        const E = await Employee.findBy('codee', params.code)
         return response.ok({ message: 'Employee was found', E})
     }
     async showEmployees({response}){

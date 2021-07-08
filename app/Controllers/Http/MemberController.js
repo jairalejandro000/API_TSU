@@ -37,7 +37,7 @@ class MemberController {
             return response.status(400).json({ message: 'Validation error'})
         }else {
             const {person_c, expiration, golf_car_c} = request.all()
-            const M = await Member.findBy('codem', params.codem)
+            const M = await Member.findBy('codem', params.code)
             if (M == null){
                 return response.status(400).json({message: 'Member was not found'})
             }else{
@@ -56,12 +56,12 @@ class MemberController {
         }
     }
     async destroyMember({ params, response }){
-        const M = await Member.findBy('codem', params.codem)
+        const M = await Member.findBy('codem', params.code)
         await M.delete()
         return response.ok({message: 'Member was deleted', M})
     }
     async showMember({ params, response }) {
-        const M = await Member.findBy('codem', params.codem)
+        const M = await Member.findBy('codem', params.code)
         return response.ok({ message: 'Member was found', M})
     }
     async showMembers({response}){
