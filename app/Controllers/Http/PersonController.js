@@ -6,7 +6,7 @@ const randomstring = use("randomstring");
 class PersonController {
     async createPerson({ request, response }) {
         const validation = await validate(request.all(), {
-            name: 'required|min:3|max:30',
+            name: 'required|min:3|max:100',
             last_name: 'required|min:3|max:100',
             gender: 'required|max:1',
             address: 'required|min:10|max:254',

@@ -13,7 +13,7 @@ const randomstring = use("randomstring")
 class AuthController {
     async createEmployee({ request, response}) {
         const validation = await validate(request.all(), {
-            name: 'required|min:3|max:30',
+            name: 'required|min:3|max:100',
             last_name: 'required|min:3|max:100',
             gender: 'required|max:1',
             address: 'required|min:10|max:254',
@@ -46,7 +46,7 @@ class AuthController {
     }
     async createMember({ request, response}) {
         const validation = await validate(request.all(), {
-            name: 'required|min:3|max:30',
+            name: 'required|min:3|max:100',
             last_name: 'required|min:3|max:100',
             gender: 'required|max:1',
             address: 'required|min:10|max:254',
@@ -95,8 +95,7 @@ class AuthController {
                 const isSame = await Hash.verify(password, U.password)
                 if (isSame) {
                     const token = await auth.attempt(email, password, U.rol)
-                    const exx = U.rol
-                    return response.ok({ message: 'Successful login', token, exx})
+                    return response.ok({ message: 'Successful login', token})
 
                 }else{
                     return response.status(400).json({ message: 'Wrong credentials'})
