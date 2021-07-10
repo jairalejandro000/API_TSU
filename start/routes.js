@@ -20,7 +20,7 @@ Route.get('/', () => {
   return { greeting: 'Hello world in JSON' }
 })
 Route.group(() => {
-  Route.post('/signup', 'PersonController.createPerson') //Only return the person's code
+  Route.post('/create', 'PersonController.createPerson') //Only return the person's code
   Route.get('/show/:code', 'PersonController.showPerson') //Return the person's data
   Route.get('/showpeople', 'PersonController.showPeople') //Return all persons data
   Route.put('/update/:code', 'PersonController.updatePerson') //Update the data

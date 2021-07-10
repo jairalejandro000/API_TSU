@@ -89,13 +89,14 @@ class AuthController {
         }else{
             const {email, password} = request.all()
             const U = await User.findBy('email', email)
+            const rol = await U.rol
             if(U == null){
                 return response.status(400).json({ message: 'Wrong credentials'})
             }else{
                 const isSame = await Hash.verify(password, U.password)
                 if (isSame) {
-                    const token = await auth.attempt(email, password, U.rol)
-                    return response.ok({ message: 'Successful login', token})
+                    const token = await auth.attempt(email, password)
+                    return response.ok({ message: 'Successful login', token, rol})
 
                 }else{
                     return response.status(400).json({ message: 'Wrong credentials'})
