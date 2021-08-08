@@ -8,9 +8,8 @@ class MemberSchema extends Schema {
     this.create('members', (table) => {
       table.increments()
       table.string('codem', 10).notNullable().unique()
-      table.string('person_c', 10).notNullable().unique()//.references('code').inTable('people')
-      table.date('expiration').notNullable()
-      table.string('golf_car_c', 10).notNullable()//.references('code').inTable('golf_cars')
+      table.string('person_c', 10).notNullable().unique()
+      table.string('golf_car_c', 10).notNullable()
       table.timestamps()
     })
   }

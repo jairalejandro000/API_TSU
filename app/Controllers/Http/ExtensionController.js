@@ -3,15 +3,16 @@ const { validate } = use('Validator')
 const Extension = use('App/Models/Extension')
 const randomstring = use("randomstring")
 const Employee = use('App/Models/Employee')
+const Database = use('Database')
 
 class ExtensionController {
-    async createExtension({ request, response}) {
+    async createExtension({ request, response }) {
         const validation = await validate(request.all(), {
             employee_c: 'required|unique:extensions,employee_c',
             extension: 'required|min:3|max:6'
         })
         if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
+            return response.status(400).json({message: 'Validation error'})
         }else {
             const {employee_c, extension} = request.all()
             const codex = randomstring.generate({
@@ -21,17 +22,17 @@ class ExtensionController {
                 return response.status(400).json({message: 'Wrong credentials'})
             }else{
                 const E = await Extension.create({employee_c, extension, codex})
-                return response.ok({ message: 'Extension created succesful', codex})
+                return response.ok({message: 'Extension created succesful'})
             }
         }
     }
     async updateExtension({ request, response, params }) {   
         const validation = await validate(request.all(), {
-            employee_c: 'required|unique:extensions,employee_c',
+            employee_c: 'required',
             extension: 'required|min:3|max:6'
         })
         if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
+            return response.status(400).json({message: 'Validation error'})
         }else {
             const {employee_c, extension} = request.all()
             const E = await Extension.findBy('codex', params.code)
@@ -45,7 +46,7 @@ class ExtensionController {
                     E.employee_c = employee_c
                     E.extension = extension
                     await E.save()
-                    return response.ok({message: 'Extension was update', E})
+                    return response.ok({message: 'Extension was update'})
                 }
             }
         }
@@ -53,15 +54,15 @@ class ExtensionController {
     async destroyExtension({ params, response }){
         const E = await Extension.findBy('codex', params.code)
         await E.delete()
-        return response.ok({message: 'Extension was deleted', E})
+        return response.ok({message: 'Extension was deleted'})
     }
     async showExtension({ params, response }) {
         const E = await Extension.findBy('codex', params.code)
         return response.ok({ message: 'Extension was found', E})
     }
-    async showExtensions({response}){
-        const E = await Extension.all()
-        return response.ok({E})
+    async showExtensions({ response }){
+        const Extensions = await Database.select('*').from('Extensions_data')
+        return response.ok({Extensions})
     }
 }
 

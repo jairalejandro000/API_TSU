@@ -31,7 +31,7 @@ class PersonController {
             number: 'required|min:7|max:15'
         })
         if (validation.fails()){
-            return response.status(400).json({ message: 'Validation error'})
+            return response.status(400).json({message: 'Validation error'})
         }else {
             const {name, last_name, gender, address, number} = request.all()
             const P = await Person.findBy('codep', params.code)
@@ -44,18 +44,18 @@ class PersonController {
                 P.address = address
                 P.number = number
                 await P.save()
-                return response.ok({message: 'Person was update', P})
+                return response.ok({message: 'Person was update'})
             }
         }
     }
     async destroyPerson({ params, response }){
         const P = await Person.findBy('codep', params.code)
         await P.delete()
-        return response.ok({message: 'Person was deleted', P})
+        return response.ok({message: 'Person was deleted'})
     }
     async showPerson({ params, response }) {
         const P = await Person.findBy('codep', params.code)
-        return response.ok({ message: 'Person was found', P })
+        return response.ok({message: 'Person was found', P})
     }
     async showPeople({response}){
         const P = await Person.all()

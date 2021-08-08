@@ -8,8 +8,8 @@ class EmployeeSchema extends Schema {
     this.create('employees', (table) => {
       table.increments()
       table.string('codee', 10).notNullable().unique()
-      table.string('person_c', 10).notNullable().unique()//.references('code').inTable('people')
-      table.string('area_c', 10).notNullable()//.references('code').inTable('areas')
+      table.string('person_c', 10).notNullable().unique()
+      table.string('area_c', 10).notNullable()
       table.timestamps()
     })
   }

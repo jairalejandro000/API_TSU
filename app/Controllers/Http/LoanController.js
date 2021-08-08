@@ -2,40 +2,43 @@
 const { validate } = use('Validator')
 const Loan = use('App/Models/Loan')
 const randomstring = use("randomstring")
-const PersonRol = use('App/Models/PersonRol')
 const GolfCar = use('App/Models/GolfCar')
+const Member = use('App/Models/Member')
+const Database = use('Database')
 
 class LoanController {
     async createLoan({ request, response}) {
         const validation = await validate(request.all(), {
-            persona_rol_c: 'required|unique:loans,person_rol_c',
+            member_c: 'required',
             date: 'required',
             start_time: 'required',
             end_time: 'required',
             holes: 'required|min:1|max:2',
             golf_car_c: 'required|max:10',
             visit: 'required|max:1'
-
         })
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit} = request.all()
+            const {member_c, date, start_time, end_time, holes, golf_car_c, visit} = request.all()
             const codel = randomstring.generate({
                 length: 10})
-            const PR = await PersonRol.findBy('codepr', persona_rol_c)
-            const GC = await GolfCar.findBy('codegc', golf_car_c)
-            if(PR == null || GC == null){
+            const M = await Member.findBy('codem', member_c)
+            if(M == null){
                 return response.status(400).json({message: 'Wrong credentials'})
             }else{
-                const L = await Loan.create({persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit, codel})
-                return response.ok({ message: 'Loan created succesful', codel})
+                const GC = await GolfCar.findBy('codegc', golf_car_c)
+                if(GC == null){
+                    return response.status(400).json({message: 'Wrong credentials'})
+                }else{
+                    const L = await Loan.create({date, start_time, end_time, holes, golf_car_c, visit, codel, member_c})
+                    return response.ok({ message: 'Loan created succesful'})
+                }
             }
         }
     }
     async updateLoan({ request, response, params }) {   
         const validation = await validate(request.all(), {
-            persona_rol_c: 'required|unique:loans,person_rol_c',
             date: 'required',
             start_time: 'required',
             end_time: 'required',
@@ -46,17 +49,15 @@ class LoanController {
         if (validation.fails()){
             return response.status(400).json({ message: 'Validation error'})
         }else {
-            const {persona_rol_c, date, start_time, end_time, holes, golf_car_c, visit} = request.all()
+            const {date, start_time, end_time, holes, golf_car_c, visit} = request.all()
             const L = await Loan.findBy('codel', params.code)
             if (L == null){
                 return response.status(400).json({message: 'Loan was not found'})
             }else{
-                const PR = await PersonRol.findBy('codepr', persona_rol_c)
                 const GC = await GolfCar.findBy('codegc', golf_car_c)
-                if(PR == null || GC == null){
+                if(GC == null){
                     return response.status(400).json({message: 'Wrong credentials'})
                 }else{
-                    L.persona_rol_c = persona_rol_c
                     L.date = date
                     L.start_time = start_time
                     L.end_time = end_time
@@ -64,23 +65,27 @@ class LoanController {
                     L.golf_car_c = golf_car_c
                     L.visit = visit
                     await L.save()
-                    return response.ok({message: 'Employee was update', L})
+                    return response.ok({message: 'Loan was update'})
                 }
             }
         }
     }
+    async reportLoan({ response }) {   
+        const Loans = await Database.select('*').from('Loans_report')
+        return response.ok({Loans})
+    }
     async destroyLoan({ params, response }){
         const L = await Loan.findBy('codel', params.code)
         await L.delete()
-        return response.ok({message: 'Loan was deleted', L})
+        return response.ok({message: 'Loan was deleted'})
     }
     async showLoan({ params, response }) {
         const L = await Loan.findBy('codel', params.code)
         return response.ok({ message: 'Loan was found', L})
     }
     async showLoans({response}){
-        const L = await Loan.all()
-        return response.ok({L})
+        const Loans = await Database.select('*').from('Loans_data')
+        return response.ok({Loans})
     }
 }
 

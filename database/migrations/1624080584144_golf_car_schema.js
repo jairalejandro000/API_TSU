@@ -13,6 +13,7 @@ class GolfCarSchema extends Schema {
       table.string('model', 100).notNullable()
       table.string('details', 100).notNullable()
       table.integer('year', 4).notNullable()
+      table.integer('number', 3).notNullable().unique()
       table.timestamps()
     })
   }
